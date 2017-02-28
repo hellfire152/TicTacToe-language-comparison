@@ -6,9 +6,72 @@ char[9] values = {'1', '2', '3', '4', '5', '6', '7', '8', '9'}
 //boolean representing the two players
 boolean player1Turn = true
 
+function displayBoard(char[] values)
+	PRINT "
+	0|1|2
+	3|4|5		//numbers represent the index of the element in the array
+	6|7|8
+	"
+endf
+
+function checkForDraw(char[] values)
+	//check if all the elements are either 'X' or 'O'
+endf
+
+function hasWinner(char[] values) //returns true if there's a winner
+	char winningChar = (player1Turn)? 'X' : 'O'
+	String winMessage = (player1Turn)? "Player 1 wins!" : "Player 2 wins!"
+	
+	//checking horizontals
+	for (i = 0; i < 9; i += 3)
+		for (j = 0; j < 3; j++)
+			IF values[i + j] == winningChar
+				IF j == 2
+					PRINT winMessage
+					RETURN true
+				ELSE CONTINUE
+			ELSE BREAK
+		endfor
+	endfor
+	
+	//checking verticals
+	for (i = 0; i < 3; i++)
+		for (j = 0; j < 9; j += 3)
+			IF values[i + j] == winningChar
+				IF j = 6
+					PRINT winMessage
+					RETURN true
+				ELSE CONTINUE
+			ELSE BREAK
+	endfor
+	
+	//checking diagonals
+		//left leaning
+		for (i = 0; i < 9; i += 4)
+			IF values[i] == winningChar
+				IF i == 8
+					PRINT winMessage
+					RETURN true
+				ELSE CONTINUE
+			ELSE BREAK
+		endfor
+		
+		//right leaning
+		for (i = 3; i < 8; i += 2)
+			IF values[i] == winningChar
+				IF i == 6
+					PRINT winMessage
+					RETURN true
+				ELSE CONTINUE
+			ELSE BREAK
+		endfor
+endf
+
 function main()
+	int turnCount = 0;
 	WHILE true
 	displayBoard(values)
+		boolean noWinner = true
 		DO
 			int input
 			DO
@@ -21,76 +84,35 @@ function main()
 			ENDIF
 			
 			input = GET INPUT //int from 1 to 9
-			WHILE [input square is already taken] //search array index would do
+			CONTINUE IF [input square is already taken] //search array index would do
 			
 			IF player1Turn
 				values[input - 1] = 'X'
 			ELSE
 				values[input - 1] = 'O'
-				
-			displayBoard(values);
-		WHILE !hasWinner
-		
-		IF player1Turn
-			PRINT "Player 1 wins!"
-		ELSE
-			PRINT "Player 2 wins!"
+			ENDIF
+			
+			turn_count++
+			
+			WHILE [invalid input]
+			
+			displayBoard(values);		
+			
+			IF hasWinner(values):
+				break
+			ENDIF
+			IF turnCount == 9
+				PRINT "It's a draw!"
+				break
+			ENDIF
+			player1Turn != player1Turn	//pass turn to next player
+		WHILE true
 			
 		PRINT "Play again? (y/n)"
-		IF input == y || input == n
+		IF input == y
+			values = {'1', '2', '3', '4', '5', '6', '7', '8', '9'}
 			CONTINUE
 		ELSE BREAK
+		ENDIF
 	ENDWHILE
-endf
-
-function displayBoard(char[] values)
-	PRINT "
-	0|1|2
-	3|4|5		//numbers represent the index of the element in the array
-	6|7|8
-	"
-endf
-
-function hasWinner(char[] values) //returns true if there's a winner
-	char winningChar = (player1Turn)? 'X' : 'O'
-	
-	//checking horizontals
-	for (i = 0; i < 9; i += 3)
-		for (j = 0; j < 3; j++)
-			IF values[i + j] == winningChar
-				IF j == 2
-					RETURN true
-				ELSE CONTINUE
-			ELSE BREAK
-		endfor
-	endfor
-	
-	//checking verticals
-	for (i = 0; i < 3; i++)
-		for (j = 0; j < 9; j += 3)
-			IF values[i + j] == winningChar
-				IF j = 6
-					RETURN true
-				ELSE CONTINUE
-			ELSE BREAK
-	endfor
-	
-	//checking diagonals
-		//left leaning
-		for (i = 0; i < 9; i += 4)
-			IF values[i] == winningChar
-				IF i == 8
-					RETURN true
-				ELSE CONTINUE
-			ELSE BREAK
-		endfor
-		
-		//right leaning
-		for (i = 3; i < 8; i += 2)
-			IF values[i] == winningChar
-				IF i == 6
-					RETURN true
-				ELSE CONTINUE
-			ELSE BREAK
-		endfor
 endf
