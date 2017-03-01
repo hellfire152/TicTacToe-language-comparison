@@ -14,10 +14,6 @@ function displayBoard(char[] values)
 	"
 endf
 
-function checkForDraw(char[] values)
-	//check if all the elements are either 'X' or 'O'
-endf
-
 function hasWinner(char[] values) //returns true if there's a winner
 	char winningChar = (player1Turn)? 'X' : 'O'
 	String winMessage = (player1Turn)? "Player 1 wins!" : "Player 2 wins!"
@@ -69,50 +65,49 @@ endf
 
 function main()
 	int turnCount = 0;
-	WHILE true
-	displayBoard(values)
-		boolean noWinner = true
-		DO
-			int input
-			DO
-			
-			//prompt for player input
-			IF player1Turn
-				PRINT "Player 1's turn "
-			ELSE
-				PRINT "Player 2's turn: "
+	WHILE true 	//for play again?
+		displayBoard(values)
+			boolean noWinner = true
+			DO		//keeps going to the next turn
+				int input
+				DO	//to make sure the input is valid
+				
+				//prompt for player input
+				IF player1Turn
+					PRINT "Player 1's turn "
+				ELSE
+					PRINT "Player 2's turn: "
+				ENDIF
+				
+				input = GET INPUT //int from 1 to 9
+				CONTINUE IF [input square is already taken] //search array index would do
+				
+				IF player1Turn
+					values[input - 1] = 'X'
+				ELSE
+					values[input - 1] = 'O'
+				ENDIF
+				
+				turn_count++
+				
+				WHILE [invalid input]
+				
+				displayBoard(values);		
+				
+				IF hasWinner(values):
+					break
+				ELSEIF turnCount == 9
+					PRINT "It's a draw!"
+					break
+				ENDIF
+				player1Turn != player1Turn	//pass turn to next player
+			WHILE true
+				
+			PRINT "Play again? (y/n)"
+			IF input == y
+				values = {'1', '2', '3', '4', '5', '6', '7', '8', '9'}
+				CONTINUE
+			ELSE BREAK
 			ENDIF
-			
-			input = GET INPUT //int from 1 to 9
-			CONTINUE IF [input square is already taken] //search array index would do
-			
-			IF player1Turn
-				values[input - 1] = 'X'
-			ELSE
-				values[input - 1] = 'O'
-			ENDIF
-			
-			turn_count++
-			
-			WHILE [invalid input]
-			
-			displayBoard(values);		
-			
-			IF hasWinner(values):
-				break
-			ENDIF
-			IF turnCount == 9
-				PRINT "It's a draw!"
-				break
-			ENDIF
-			player1Turn != player1Turn	//pass turn to next player
-		WHILE true
-			
-		PRINT "Play again? (y/n)"
-		IF input == y
-			values = {'1', '2', '3', '4', '5', '6', '7', '8', '9'}
-			CONTINUE
-		ELSE BREAK
-		ENDIF
 	ENDWHILE
 endf
